@@ -37,9 +37,12 @@
 }
 
 .memora-logo-icon {
-  font-size: 1.2rem;
-  color: #fff;
-  margin-right: 0.3rem;
+  width: 2em;
+  height: 2em;
+  object-fit: contain;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 0.2em;
 }
 
 .navbar-divider {

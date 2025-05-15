@@ -6,7 +6,7 @@ export default function DashboardNavbar() {
   return (
     <nav className="dashboard-navbar">
       <div className="dashboard-navbar-left">
-        <span className="dashboard-logo-icon">▲</span>
+      <img src="/logo.png" alt="MEmoraNet Logo" className="memora-logo-icon" />
         <span className="dashboard-navbar-divider">/</span>
         <span className="dashboard-logo-text">MEmoraNet</span>
       </div>

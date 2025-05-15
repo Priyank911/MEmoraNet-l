@@ -8,7 +8,7 @@ const Navbar = () => {
     <nav className="memora-navbar">
       <div className="enhanced-navbar">
         <div className="navbar-left">
-          <span className="memora-logo-icon">▲</span>
+        <img src="/logo.png" alt="MEmoraNet Logo" className="memora-logo-icon" />
           <span className="navbar-divider">/</span>
           <span className="memora-logo-text">MEmoraNet</span>
         </div>
