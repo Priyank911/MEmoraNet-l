@@ -1,86 +1,21 @@
-// import React from 'react';
-// import './App.css';
-// import Navbar from './Navbar';
-
-// function App() {
-//   return (
-//     <div className="memora-hero-bg">
-//       <Navbar />
-//       <header className="memora-hero">
-//         <div className="memora-hero-content enhanced-hero-content">
-//           <h1 className="memora-hero-title enhanced-hero-title">
-//             The <span className="memora-gradient">RAG-Powered AI Companion</span> for Life
-//           </h1>
-//           <p className="memora-hero-desc enhanced-hero-desc">
-//             <span className="hero-desc-muted">Used by innovators and lifelong learners,</span> <b>MEmoraNet</b> enables you to create <b>high-quality, evolving AI experiences</b> with dynamic memory, context-aware retrieval, and emotionally intelligent responses.
-//           </p>
-//           <div className="memora-hero-buttons enhanced-hero-buttons">
-//             <a href="#get-started" className="memora-btn primary">Get Started</a>
-//             <a href="#learn-more" className="memora-btn secondary">Learn More</a>
-//           </div>
-//           <div className="memora-hero-terminal enhanced-hero-terminal">
-//              Sear🔍hed on Google  ~  MemoraNet 
-//           </div>
-//         </div>
-//       </header>
-//       <div className="memora-grid-bg"></div>
-//       {/* Features Section */}
-//       <section className="features">
-//         <h2 className="features-title">What's in MEmoraNet?</h2>
-//         <div className="features-grid">
-//           <div className="feature-card">
-//             <h4>Dynamic Memory & Personalization</h4>
-//             <p>MEmoraNet adapts to you, storing and retrieving memories for deeply personalized, lifelong AI interactions.</p>
-//           </div>
-//           <div className="feature-card">
-//             <h4>Multi-Vector Memory Architecture</h4>
-//             <p>Uses Pinecone, FAISS, and ChromaDB to organize memories by context: Personal, Work/School, and Financial/Other.</p>
-//           </div>
-//           <div className="feature-card">
-//             <h4>Sentiment & Tone Adaptation</h4>
-//             <p>Analyzes conversation sentiment to adjust tone, making responses feel more human and emotionally intelligent.</p>
-//           </div>
-//           <div className="feature-card">
-//             <h4>Spiral Reinforcement Learning</h4>
-//             <p>Periodically re-trains and re-embeds key conversations for long-term memory consistency and growth.</p>
-//           </div>
-//           <div className="feature-card">
-//             <h4>Fast Retrieval</h4>
-//             <p>Employs LRU or Redis cache for instant access to frequently used data and memories.</p>
-//           </div>
-//           <div className="feature-card">
-//             <h4>Lifelong Learning & Consistency</h4>
-//             <p>Remembers, adapts, and grows with you over time, ensuring a truly evolving AI companion experience.</p>
-//           </div>
-//         </div>
-//       </section>
-//       {/* Footer */}
-//       <footer className="footer">
-//         <div className="footer-content">
-//           <div>MEmoraNet &copy; {new Date().getFullYear()} | Advanced RAG-based AI Companion</div>
-//           <div>
-//             <a href="#" style={{ color: '#61dafb', textDecoration: 'none', marginRight: '1rem' }}>Docs</a>
-//             <a href="#" style={{ color: '#61dafb', textDecoration: 'none', marginRight: '1rem' }}>GitHub</a>
-//             <a href="#" style={{ color: '#61dafb', textDecoration: 'none' }}>Contact</a>
-//           </div>
-//         </div>
-//       </footer>
-//     </div>
-//   );
-// }
-
-// export default App;
-
-
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import Navbar from './Navbar';
+import { Link, useNavigate } from 'react-router-dom';
+import { SignedIn, SignedOut, SignInButton, useAuth } from "@clerk/clerk-react";
 
 function App() {
+  const { isLoaded, userId } = useAuth();
+  const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(false);
   const [activeFeature, setActiveFeature] = useState<string | null>(null);
 
   useEffect(() => {
+    // If user is signed in and on the home page, redirect to dashboard
+    if (isLoaded && userId && window.location.pathname === '/') {
+      navigate('/dashboard');
+    }
+    
     // Fade in animation on load
     setIsVisible(true);
     
@@ -112,7 +47,7 @@ function App() {
     return () => {
       featureObserver.disconnect();
     };
-  }, []);
+  }, [isLoaded, userId, navigate]);
 
   // Features data
   const features = [
@@ -168,8 +103,20 @@ function App() {
             <span className="hero-desc-muted">Used by innovators and lifelong learners,</span> <b>MEmoraNet</b> enables you to create <b>high-quality, evolving AI experiences</b> with dynamic memory, context-aware retrieval, and emotionally intelligent responses.
           </p>
           <div className="memora-hero-buttons enhanced-hero-buttons">
-            <a href="#get-started" className="memora-btn primary">Get Started</a>
-            <a href="#learn-more" className="memora-btn secondary">Learn More</a>
+            {isLoaded && (
+              <>
+                {!userId ? (
+                  <SignInButton mode="modal" fallbackRedirectUrl="/dashboard">
+                    <button className="memora-btn primary">Get Started</button>
+                  </SignInButton>
+                ) : (
+                  <Link to="/dashboard" className="memora-btn primary">
+                    Go to Dashboard
+                  </Link>
+                )}
+              </>
+            )}
+            <Link to="#learn-more" className="memora-btn secondary">Learn More</Link>
           </div>
           <div className="memora-hero-terminal enhanced-hero-terminal">
             <span className="cursor">›</span> Sear<span className="search-icon">🔍</span>hed on Google ~ MemoraNet
